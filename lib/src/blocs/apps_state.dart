@@ -5,7 +5,7 @@ abstract class AppsState extends Equatable {
   const AppsState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class AppsInitiateState extends AppsState {
@@ -23,19 +23,19 @@ class AppsLoading extends AppsState {
 }
 
 class AppsLoaded extends AppsState {
-  final List<Application> apps;
+  final List<Application?>? apps;
 
-  final ShortcutAppsModel shortcutAppsModel;
+  final ShortcutAppsModel? shortcutAppsModel;
 
-  final String sortType;
+  final String? sortType;
 
   AppsLoaded(
-      {@required this.apps,
-      @required this.sortType,
-      @required this.shortcutAppsModel});
+      {required this.apps,
+      required this.sortType,
+      required this.shortcutAppsModel});
 
   @override
-  List<Object> get props => [shortcutAppsModel, apps, sortType];
+  List<Object?> get props => [shortcutAppsModel, apps, sortType];
 }
 
 class AppsError extends AppsState {

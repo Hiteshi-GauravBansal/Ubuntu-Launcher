@@ -38,9 +38,9 @@ class HomeState extends State {
 
   String starterIcon = "assets/images/drawer.png";
 
-  bool autoOpenDrawer;
+  bool? autoOpenDrawer;
 
-  String currentWallpaper;
+  String? currentWallpaper;
 
   Future<void> loadWallpaper() async {
     currentWallpaper = await LocalStorage.getWallpaper();
@@ -95,26 +95,26 @@ class HomeState extends State {
                         physics: ScrollPhysics(),
                         shrinkWrap: true,
                         children: <Widget>[
-                          for (final app in state.apps)
+                          for (final app in state.apps!)
                             GestureDetector(
                               onTap: () async {
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pop();
-                                final ShortcutAppsModel shortcutApps =
+                                final ShortcutAppsModel? shortcutApps =
                                     state.shortcutAppsModel;
 
                                 switch (appTypes) {
                                   case ShortcutAppTypes.CAMERA:
-                                    shortcutApps.camera = app.packageName;
+                                    shortcutApps!.camera = app!.packageName;
                                     break;
                                   case ShortcutAppTypes.MESSAGE:
-                                    shortcutApps.message = app.packageName;
+                                    shortcutApps!.message = app!.packageName;
                                     break;
                                   case ShortcutAppTypes.PHONE:
-                                    shortcutApps.phone = app.packageName;
+                                    shortcutApps!.phone = app!.packageName;
                                     break;
                                   case ShortcutAppTypes.SETTINGS:
-                                    shortcutApps.setting = app.packageName;
+                                    shortcutApps!.setting = app!.packageName;
                                     break;
 
                                   default:
@@ -122,7 +122,7 @@ class HomeState extends State {
                                 }
 
                                 BlocProvider.of<AppsCubit>(context)
-                                    .updateShortcutApps(shortcutApps);
+                                    .updateShortcutApps(shortcutApps!);
 
                                 SuccessMessage(
                                   message:
@@ -154,7 +154,7 @@ class HomeState extends State {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10.0),
                                             child: Text(
-                                              app.appName,
+                                              app!.appName,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   color: Colors.white,
@@ -186,7 +186,7 @@ class HomeState extends State {
     }
 
     Widget shortcutAppsBuild(
-        IconData icon, String application, ShortcutAppTypes appType) {
+        IconData icon, String? application, ShortcutAppTypes appType) {
       return GestureDetector(
         onTap: () async {
           if (application == null) {
@@ -296,19 +296,19 @@ class HomeState extends State {
                                     return Column(children: [
                                       shortcutAppsBuild(
                                           Icons.phone,
-                                          state.shortcutAppsModel.phone,
+                                          state.shortcutAppsModel!.phone,
                                           ShortcutAppTypes.PHONE),
                                       shortcutAppsBuild(
                                           Icons.sms,
-                                          state.shortcutAppsModel.message,
+                                          state.shortcutAppsModel!.message,
                                           ShortcutAppTypes.MESSAGE),
                                       shortcutAppsBuild(
                                           Icons.camera,
-                                          state.shortcutAppsModel.camera,
+                                          state.shortcutAppsModel!.camera,
                                           ShortcutAppTypes.CAMERA),
                                       shortcutAppsBuild(
                                           Icons.settings,
-                                          state.shortcutAppsModel.setting,
+                                          state.shortcutAppsModel!.setting,
                                           ShortcutAppTypes.SETTINGS)
                                     ]);
                                   } else
@@ -365,9 +365,9 @@ class HomeState extends State {
                   key: scaffoldKey,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                    image: currentWallpaper != null
-                        ? FileImage(File(currentWallpaper))
-                        : AssetImage(defaultWallpaper),
+                    image: (currentWallpaper != null
+                        ? FileImage(File(currentWallpaper!))
+                        : AssetImage(defaultWallpaper)) as ImageProvider<Object>,
                     fit: BoxFit.cover,
                   )),
                   height: MediaQuery.of(context).size.height,

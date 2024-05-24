@@ -5,15 +5,15 @@ import 'package:logger/logger.dart';
 class CustomSnackBar {
   final BuildContext context;
   final String message;
-  final int days;
-  final int seconds;
-  final Color color;
-  final Function fn;
-  final GlobalKey<ScaffoldState> key;
+  final int? days;
+  final int? seconds;
+  final Color? color;
+  final Function? fn;
+  final GlobalKey<ScaffoldState>? key;
 
   CustomSnackBar({
-    @required this.context,
-    @required this.message,
+    required this.context,
+    required this.message,
     this.seconds: 2,
     this.fn,
     this.days: 0,
@@ -25,10 +25,10 @@ class CustomSnackBar {
     final snackBar = SnackBar(
       margin: const EdgeInsets.all(10),
       behavior: SnackBarBehavior.floating,
-      duration: Duration(days: days, seconds: seconds),
+      duration: Duration(days: days!, seconds: seconds!),
       backgroundColor: color,
       content: GestureDetector(
-        onTap: fn,
+        onTap: fn as void Function()?,
         child: Container(
           margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -56,9 +56,6 @@ class CustomSnackBar {
       ),
     );
 
-    if (key != null) {
-      return key.currentState.showSnackBar(snackBar);
-    } else
-      return ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    return ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

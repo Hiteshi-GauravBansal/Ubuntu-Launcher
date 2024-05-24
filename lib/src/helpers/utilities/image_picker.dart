@@ -6,20 +6,20 @@ import 'package:launcher/src/helpers/widgets/error_message.dart';
 final picker = ImagePicker();
 
 Future<PickedFile> getImage() async {
-  var image = await picker.getImage(source: ImageSource.gallery);
-  return image;
+  var image = (await picker.pickImage(source: ImageSource.gallery))!;
+  return PickedFile(image.path);
 }
 
 Future<PickedFile> _selectImageFromFile() async {
-  var image = await picker.getImage(
+  var image = (await picker.pickImage(
     source: ImageSource.gallery,
-  );
-  return image;
+  ))!;
+  return PickedFile(image.path);
 }
 
 Future<PickedFile> _captureFromCamera() async {
-  var image = await picker.getImage(source: ImageSource.camera);
-  return image;
+  var image = (await picker.pickImage(source: ImageSource.camera))!;
+  return PickedFile(image.path);
 }
 
 typedef ImagePickedCallback = void Function(PickedFile image);

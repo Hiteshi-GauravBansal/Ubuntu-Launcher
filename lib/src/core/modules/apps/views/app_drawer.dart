@@ -12,7 +12,7 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
 class AppDrawer extends StatelessWidget {
   static const route = '/app-drawer';
-  TextEditingController _searchController;
+  TextEditingController? _searchController;
   GlobalKey<AutoCompleteTextFieldState<String>> _autoCompeleteTextFieldkey =
       new GlobalKey();
   List<String> sortTypes = [
@@ -83,7 +83,7 @@ class AppDrawer extends StatelessWidget {
                             child: Text(""),
                           ),
                           onChanged: (sortType) {
-                            appsCubit.updateSortType(sortType);
+                            appsCubit.updateSortType(sortType!);
                           },
                           items: sortTypes
                               .map<DropdownMenuItem<String>>((String value) {
@@ -119,25 +119,25 @@ class AppDrawer extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: SimpleAutoCompleteTextField(
-                                    suggestionsAmount: appState.apps.length,
+                                    suggestionsAmount: appState.apps!.length,
                                     style: TextStyle(
                                         letterSpacing: 1.2,
                                         color: Colors.white,
                                         fontSize: normalTextSize),
                                     controller: _searchController,
                                     key: _autoCompeleteTextFieldkey,
-                                    suggestions: appState.apps
-                                        .map((app) => app.appName)
+                                    suggestions: appState.apps!
+                                        .map((app) => app!.appName)
                                         .toList(),
                                     textSubmitted: (appName) {
                                       for (int i = 0;
-                                          i < appState.apps.length;
+                                          i < appState.apps!.length;
                                           i++) {
-                                        if (appState.apps[i].appName
+                                        if (appState.apps![i]!.appName
                                                 .toString() ==
                                             appName) {
                                           DeviceApps.openApp(
-                                              appState.apps[i].packageName);
+                                              appState.apps![i]!.packageName);
                                           break;
                                         }
                                       }
@@ -191,11 +191,11 @@ class AppDrawer extends StatelessWidget {
                       ),
                     );
                   } else if (state is AppsLoaded) {
-                    return StaggeredGridView.countBuilder(
-                      crossAxisCount: ((4 * deviceWidth) / 432).round(),
-                      itemCount: state.apps.length,
+                    return GridView.builder(
+                      // crossAxisCount: ((4 * deviceWidth) / 432).round(),
+                      itemCount: state.apps!.length,
                       itemBuilder: (BuildContext context, int i) {
-                        Application app = state.apps[i];
+                        Application app = state.apps![i]!;
                         return GestureDetector(
                             onTap: () {
                               try {
@@ -224,7 +224,9 @@ class AppDrawer extends StatelessWidget {
                                 DeviceApps.openAppSettings(app.packageName);
                               } catch (error) {
                                 Logger().w(error);
-                                ErrorMessage(context: context, error: error)
+                                ErrorMessage(
+                                        context: context,
+                                        error: error.toString())
                                     .display();
                               }
                             },
@@ -273,8 +275,10 @@ class AppDrawer extends StatelessWidget {
                               ),
                             ));
                       },
-                      staggeredTileBuilder: (int index) =>
-                          new StaggeredTile.count(1, ratio < 1.2 ? ratio : 1.0),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4),
+                      // staggeredTileBuilder: (int index) =>
+                      //     new StaggeredTile.count(1, ratio < 1.2 ? ratio : 1.0),
                     );
                   } else
                     return Center(
